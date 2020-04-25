@@ -15,7 +15,15 @@
     <div data-netlify-identity-button></div>
 
     <script>
-      netlifyIdentity.on("init", async (user) => {
+      netlifyIdentity.on("init", (user) => {
+        if (user) {
+          bootIntercomForUser(user)
+        } else {
+          bootIntercom()
+        }
+      })
+
+      async function bootIntercomForUser(user) {
         const endpoint = "/.netlify/functions/intercom-hash"
         const authorization = `Bearer ${user.token.access_token}`
         const response = await fetch(endpoint, { headers: { authorization } })
@@ -26,7 +34,13 @@
           user_id: user.id,
           user_hash: userHash,
         })
-      })
+      }
+
+      function bootIntercom() {
+        Intercom("boot", {
+          app_id: "t8m7a9ed",
+        })
+      }
     </script>
 
     <script>
