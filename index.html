@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intercom ⭤ Netlify</title>
+
+    <script
+      type="text/javascript"
+      src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+  </head>
+  <body>
+    <div data-netlify-identity-menu></div>
+    <div data-netlify-identity-button></div>
+
+    <script>
+      netlifyIdentity.on("init", async (user) => {
+        const endpoint = "/.netlify/functions/intercom-hash"
+        const authorization = `Bearer ${user.token.access_token}`
+        const response = await fetch(endpoint, { headers: { authorization } })
+        const userHash = await response.text()
+
+        Intercom("boot", {
+          app_id: "t8m7a9ed",
+          user_id: user.id,
+          user_hash: userHash,
+        })
+      })
+    </script>
+
+    <script>
+      // prettier-ignore
+      ;(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/t8m7a9ed';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
+  </body>
+</html>
